@@ -1,13 +1,29 @@
-## python 鼠标点击描点
+## python 鼠标右键点击描点，滚轮放大缩小
     fig = plt.figure()
     ax1 = plt.subplot(111)
     ax1.plot(x,y)
     def call_back(event):
-        info = 'name:{}\n button:{}\n x,y:{},{}\n xdata,ydata:{} {}'.format(event.name, event.button, event.x, event.y,event.xdata, event.ydata)
-        ax = event.inaxes
-        ax.scatter(event.xdata, event.ydata, s=15, color='black', marker=',')
-        ax.annotate('{0:.3f},{1:.3f}'.format(event.xdata, event.ydata), xy=(event.xdata, event.ydata))
-        fig.canvas.draw_idle()
+        axtemp = event.inaxes
+        if not axtemp:
+            return
+        x_min, x_max = axtemp.get_xlim()
+        fanwei = (x_max - x_min) / 10
+        if event.button == 'up':
+            ax1.set(xlim=(x_min + fanwei, x_max - fanwei))
+            ax2.set(xlim=(x_min + fanwei, x_max - fanwei))
+            ax3.set(xlim=(x_min + fanwei, x_max - fanwei))
+            ax4.set(xlim=(x_min + fanwei, x_max - fanwei))
+            print('up')
+        elif event.button == 'down':
+            ax1.set(xlim=(x_min - fanwei, x_max + fanwei))
+            ax2.set(xlim=(x_min - fanwei, x_max + fanwei))
+            ax3.set(xlim=(x_min - fanwei, x_max + fanwei))
+            ax4.set(xlim=(x_min - fanwei, x_max + fanwei))
+            print('down')
+        elif event.button == 3:
+            axtemp.scatter(event.xdata, event.ydata, s=10, color='black', marker=',')
+            axtemp.annotate('{0:.3f},{1:.3f}'.format(event.xdata, event.ydata), xy=(event.xdata, event.ydata))
+        fig.canvas.draw_idle()  # 绘图动作实时反映在图像上
 
     fig.canvas.mpl_connect('button_press_event', call_back)
     plt.show()
