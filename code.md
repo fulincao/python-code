@@ -27,3 +27,11 @@
 
     fig.canvas.mpl_connect('button_press_event', call_back)
     plt.show()
+
+
+## 让子图都能做同一个操作，单个子图放大，所有子图都进行放大
+    from matplotlib import pyplot as plt
+    ax1 = plt.subplot(2,1,1)
+    ax1.plot(...)
+    ax2 = plt.subplot(2,1,2, sharex=ax1)
+    ax2.plot(...)
