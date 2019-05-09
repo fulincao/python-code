@@ -35,3 +35,15 @@
     ax1.plot(...)
     ax2 = plt.subplot(2,1,2, sharex=ax1)
     ax2.plot(...)
+## 字典转对象
+    def dic2obj(d):
+    top = type('new', (object,), d)
+    seqs = tuple, list, set, frozenset
+    for i, j in d.items():
+        if isinstance(j, dict):
+            setattr(top, i, dic2obj(j))
+        elif isinstance(j, seqs):
+            setattr(top, i, type(j)(dic2obj(sj) if isinstance(sj, dict) else sj for sj in j))
+        else:
+            setattr(top, i, j)
+    return top
